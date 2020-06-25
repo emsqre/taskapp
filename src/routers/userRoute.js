@@ -35,6 +35,7 @@ router.post("/users", async (req, res) => {
   }
 });
 
+
 router.post("/users/login", async (req, res) => {
   try {
     const user = await User.findByCredentials(
@@ -71,9 +72,10 @@ router.get("/users/me", auth, async (req, res) => {
   res.send(req.user);
 });
 
+//delete user route not deleting users currently
 router.delete("/users/me", auth, async (req, res) => {
   try {
-    await req.user.deleteOne();
+    await req.user.remove();
     res.send(req.user);
   } catch (error) {
     res.status(500).send(error);
