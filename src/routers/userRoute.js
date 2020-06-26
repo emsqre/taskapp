@@ -27,7 +27,7 @@ router.post("/users", async (req, res) => {
     const user = await new User(req.body);
     await user.save();
     const token = await user.generateAuthToken();
-    sendWelcomeEmail(user.email, user.name);
+    //sendWelcomeEmail(user.email, user.name);
 
     res.status(200).send({ user, token });
   } catch (error) {
@@ -75,7 +75,8 @@ router.get("/users/me", auth, async (req, res) => {
 //delete user route not deleting users currently
 router.delete("/users/me", auth, async (req, res) => {
   try {
-    await req.user.remove();
+    await req.user.deleteOne();
+    Task.deleteMany({ creator: req.user._id });
     res.send(req.user);
   } catch (error) {
     res.status(500).send(error);
